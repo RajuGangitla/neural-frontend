@@ -4,7 +4,6 @@ import { Vote } from '@/lib/db/schema';
 import { ChatRequestOptions, Message } from 'ai';
 import { memo } from 'react';
 import equal from 'fast-deep-equal';
-import { UIBlock } from './block';
 
 interface BlockMessagesProps {
   chatId: string;
@@ -18,7 +17,6 @@ interface BlockMessagesProps {
     chatRequestOptions?: ChatRequestOptions,
   ) => Promise<string | null | undefined>;
   isReadonly: boolean;
-  blockStatus: UIBlock['status'];
 }
 
 function PureBlockMessages({
@@ -40,18 +38,9 @@ function PureBlockMessages({
     >
       {messages.map((message, index) => (
         <PreviewMessage
-          chatId={chatId}
           key={message.id}
           message={message}
           isLoading={isLoading && index === messages.length - 1}
-          vote={
-            votes
-              ? votes.find((vote) => vote.messageId === message.id)
-              : undefined
-          }
-          setMessages={setMessages}
-          reload={reload}
-          isReadonly={isReadonly}
         />
       ))}
 
@@ -67,11 +56,6 @@ function areEqual(
   prevProps: BlockMessagesProps,
   nextProps: BlockMessagesProps,
 ) {
-  if (
-    prevProps.blockStatus === 'streaming' &&
-    nextProps.blockStatus === 'streaming'
-  )
-    return true;
 
   if (prevProps.isLoading !== nextProps.isLoading) return false;
   if (prevProps.isLoading && nextProps.isLoading) return false;
