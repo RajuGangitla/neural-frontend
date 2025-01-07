@@ -6,7 +6,6 @@ import { python } from '@codemirror/lang-python';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { basicSetup } from 'codemirror';
 import React, { memo, useEffect, useRef } from 'react';
-import { Suggestion } from '@/lib/db/schema';
 
 type EditorProps = {
   content: string;
@@ -14,7 +13,6 @@ type EditorProps = {
   status: 'streaming' | 'idle';
   isCurrentVersion: boolean;
   currentVersionIndex: number;
-  suggestions: Array<Suggestion>;
 };
 
 function PureCodeEditor({ content, saveContent, status }: EditorProps) {
@@ -96,7 +94,6 @@ function PureCodeEditor({ content, saveContent, status }: EditorProps) {
 }
 
 function areEqual(prevProps: EditorProps, nextProps: EditorProps) {
-  if (prevProps.suggestions !== nextProps.suggestions) return false;
   if (prevProps.currentVersionIndex !== nextProps.currentVersionIndex)
     return false;
   if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) return false;

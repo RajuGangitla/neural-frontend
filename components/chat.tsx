@@ -3,13 +3,11 @@
 import { useState } from 'react';
 import { MultimodalInput } from './multimodal-input';
 import { Messages } from './messages';
-import { useBlockSelector } from '@/hooks/use-block';
 import { streamGenerator } from "@/utils/streaming";
 
 export function Chat() {
   const [messages, setMessages] = useState<any>([]);
   const [input, setInput] = useState<string>("");
-  const isBlockVisible = useBlockSelector((state) => state.isVisible);
   const [isLoading, setIsLoading] = useState(false);
   let accumulatedMessage = '';
 
@@ -29,26 +27,30 @@ export function Chat() {
       if (!response.body) {
         throw new Error("Response body is null");
       }
+      const data = await response.json();
 
-      const reader = response.body.getReader();
+      // const reader = response.body.getReader();
 
-      // Process the stream
-      for await (const chunk of streamGenerator(reader)) {
-        accumulatedMessage += chunk;
-      }
+      // // Process the stream
+      // for await (const chunk of streamGenerator(reader)) {
+      //   accumulatedMessage += chunk;
+      // }
 
-    } catch (error) {
-      console.error('Error:', error);
-      setMessages((prevMessages: any) => [
-        { role: 'assistant', content: 'Sorry, there was an error processing your request.' },
-        ...prevMessages
-      ]);
-    } finally {
       // Update the most recent assistant message with accumulated content
       setMessages((prevMessages: any) => [
         ...prevMessages,
-        { role: 'assistant', content: accumulatedMessage },
-      ])
+        {
+          role: 'assistant',
+          content: data.response
+        },
+      ]);
+    } catch (error) {
+      console.error('Error:', error);
+      setMessages((prevMessages: any) => [
+        ...prevMessages,
+        { role: 'assistant', content: 'Sorry, there was an error processing your request.' },
+      ]);
+    } finally {
       setIsLoading(false);
     }
   }
@@ -71,7 +73,6 @@ export function Chat() {
         <Messages
           isLoading={isLoading}
           messages={messages}
-          isBlockVisible={isBlockVisible}
         />
 
         <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
