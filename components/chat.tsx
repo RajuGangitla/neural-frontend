@@ -3,47 +3,32 @@
 import { useState } from 'react';
 import { MultimodalInput } from './multimodal-input';
 import { Messages } from './messages';
-import { streamGenerator } from "@/utils/streaming";
+import { handleAgentApiCall } from '@/utils/streaming';
 
 export function Chat() {
   const [messages, setMessages] = useState<any>([]);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  let accumulatedMessage = '';
+  const [streamMessage, setStreamMessage] = useState<string>("");
+
 
   async function handleApiCall(message: string) {
     try {
-      const response = await fetch("http://127.0.0.1:8000/agent", { // Note the /stream endpoint
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: message }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      const stream = await handleAgentApiCall(message);
+      let accumulatedMessage = "";
+      for await (const chunk of stream) {
+        accumulatedMessage += chunk;
+        setStreamMessage((prev) => prev + chunk);
       }
-      if (!response.body) {
-        throw new Error("Response body is null");
-      }
-      const data = await response.json();
-
-      // const reader = response.body.getReader();
-
-      // // Process the stream
-      // for await (const chunk of streamGenerator(reader)) {
-      //   accumulatedMessage += chunk;
-      // }
-
-      // Update the most recent assistant message with accumulated content
+      setIsLoading(false);
       setMessages((prevMessages: any) => [
         ...prevMessages,
         {
           role: 'assistant',
-          content: data.response
+          content: accumulatedMessage
         },
       ]);
+      setStreamMessage("");
     } catch (error) {
       console.error('Error:', error);
       setMessages((prevMessages: any) => [
@@ -67,12 +52,14 @@ export function Chat() {
   };
 
 
+  console.log(streamMessage, "streamMessage")
   return (
     <>
       <div className="flex flex-col min-w-0 h-dvh bg-background">
         <Messages
           isLoading={isLoading}
           messages={messages}
+          streamMessage={streamMessage}
         />
 
         <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">

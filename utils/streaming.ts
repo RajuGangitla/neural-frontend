@@ -1,46 +1,36 @@
 
 
-export async function* streamGenerator(
-    reader: ReadableStreamDefaultReader<Uint8Array>
-): AsyncGenerator<string, void, unknown> {
+export async function* getIterableStream(
+    body: ReadableStream<Uint8Array>
+): AsyncIterable<string> {
+    const reader = body.getReader();
     const decoder = new TextDecoder();
-    let buffer = '';
 
     while (true) {
         const { value, done } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-
-        // Process all complete lines except the last one
-        for (let i = 0; i < lines.length - 1; i++) {
-            const line = lines[i].trim();
-            if (line) {
-                try {
-                    const parsed = JSON.parse(line);
-                    if (parsed.type === 'message') {
-                        yield parsed.content;
-                    }
-                } catch (e) {
-                    console.error('Error parsing JSON:', e);
-                }
-            }
+        if (done) {
+            break;
         }
-
-        // Keep the last (potentially incomplete) line in the buffer
-        buffer = lines[lines.length - 1];
+        const decodedChunk = decoder.decode(value, { stream: true });
+        yield decodedChunk;
     }
+}
 
-    // Process any remaining content in the buffer
-    if (buffer.trim()) {
-        try {
-            const parsed = JSON.parse(buffer);
-            if (parsed.type === 'message') {
-                yield parsed.content;
-            }
-        } catch (e) {
-            console.error('Error parsing final JSON:', e);
-        }
+
+export async function handleAgentApiCall(message: string) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agent`, { // Note the /stream endpoint
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query: message }),
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
+    if (!response.body) {
+        throw new Error("Response body is null");
+    }
+    return getIterableStream(response.body)
 }

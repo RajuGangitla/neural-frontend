@@ -6,11 +6,13 @@ import { memo } from 'react';
 interface MessagesProps {
   isLoading: boolean;
   messages: any;
+  streamMessage: string
 }
 
 function PureMessages({
   isLoading,
   messages,
+  streamMessage
 }: MessagesProps) {
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
@@ -34,6 +36,10 @@ function PureMessages({
         messages.length > 0 &&
         messages[messages.length - 1].role === 'user' && <ThinkingMessage />}
 
+      {
+        isLoading && streamMessage?.length > 0 && <PreviewMessage message={streamMessage} isLoading={isLoading} />
+      }
+
       <div
         ref={messagesEndRef}
         className="shrink-0 min-w-[24px] min-h-[24px]"
@@ -46,6 +52,6 @@ export const Messages = memo(PureMessages, (prevProps, nextProps) => {
   if (prevProps.isLoading !== nextProps.isLoading) return false;
   if (prevProps.isLoading && nextProps.isLoading) return false;
   if (prevProps.messages.length !== nextProps.messages.length) return false;
-
+  if (prevProps.streamMessage.length !== nextProps.streamMessage.length) return false;
   return true;
 });
