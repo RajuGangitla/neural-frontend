@@ -9,26 +9,28 @@ export function Chat() {
   const [messages, setMessages] = useState<any>([]);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  const [streamMessage, setStreamMessage] = useState<string>("");
 
 
   async function handleApiCall(message: string) {
     try {
-      const stream = await handleAgentApiCall(message);
-      let accumulatedMessage = "";
-      for await (const chunk of stream) {
-        accumulatedMessage += chunk;
-        setStreamMessage((prev) => prev + chunk);
-      }
-      setIsLoading(false);
+
       setMessages((prevMessages: any) => [
         ...prevMessages,
-        {
-          role: 'assistant',
-          content: accumulatedMessage
-        },
+        { role: "assistant", content: "" }, // Empty content for now
       ]);
-      setStreamMessage("");
+      const stream = await handleAgentApiCall(message);
+      let accumulatedMessage = "";
+
+      for await (const chunk of stream) {
+        accumulatedMessage += chunk;
+
+        // Update the last message in the messages array
+        setMessages((prevMessages: any) => {
+          const updatedMessages = [...prevMessages];
+          updatedMessages[updatedMessages.length - 1].content = accumulatedMessage;
+          return updatedMessages;
+        });
+      }
     } catch (error) {
       console.error('Error:', error);
       setMessages((prevMessages: any) => [
@@ -52,14 +54,12 @@ export function Chat() {
   };
 
 
-  console.log(streamMessage, "streamMessage")
   return (
     <>
       <div className="flex flex-col min-w-0 h-dvh bg-background">
         <Messages
           isLoading={isLoading}
           messages={messages}
-          streamMessage={streamMessage}
         />
 
         <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">

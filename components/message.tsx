@@ -2,10 +2,8 @@
 
 import cx from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
-import { memo, useState } from 'react';
 import { SparklesIcon } from './icons';
 import { Markdown } from './markdown';
-import equal from 'fast-deep-equal';
 import { cn } from '@/lib/utils';
 
 const PurePreviewMessage = ({
@@ -54,21 +52,8 @@ const PurePreviewMessage = ({
   );
 };
 
-export const PreviewMessage = memo(
-  PurePreviewMessage,
-  (prevProps, nextProps) => {
-    if (prevProps.isLoading !== nextProps.isLoading) return false;
-    if (prevProps.message.content !== nextProps.message.content) return false;
-    if (
-      !equal(
-        prevProps.message.toolInvocations,
-        nextProps.message.toolInvocations,
-      )
-    )
-      return false;
-    return true;
-  },
-);
+export const PreviewMessage = PurePreviewMessage;
+
 
 export const ThinkingMessage = () => {
   const role = 'assistant';
