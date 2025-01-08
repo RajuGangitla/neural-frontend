@@ -1,6 +1,7 @@
 import { Message } from 'ai';
 import { PreviewMessage, ThinkingMessage } from './message';
 import { useScrollToBottom } from './use-scroll-to-bottom';
+import { Overview } from './overview';
 
 interface MessagesProps {
   isLoading: boolean;
@@ -19,7 +20,7 @@ function PureMessages({
       ref={messagesContainerRef}
       className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
     >
-      {/* {messages.length === 0 && <Overview />} */}
+      {messages.length === 0 && <Overview />}
 
       {messages.map((message: Message, index: number) => (
         <PreviewMessage
