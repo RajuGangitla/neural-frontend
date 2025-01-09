@@ -2,8 +2,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { MessageIcon, VercelIcon } from './icons';
-
 export const Overview = () => {
   return (
     <>
@@ -25,15 +23,16 @@ export const Overview = () => {
             />
           </div>
           <p>
-            This chatbot is designed to provide seamless support for Crustdata's API users. It utilizes
-            Next.js and the AI SDK by Vercel to create an interactive and responsive chat experience.
+            This chatbot is designed to provide seamless support for Crustdata&apos;s API users. It
+            utilizes Next.js and the AI SDK by Vercel to create an interactive and responsive chat
+            experience.
           </p>
           <p>
-            The bot is knowledgeable about Crustdata's API documentation and can assist with queries
-            related to API usage, endpoints, and best practices.
+            The bot is knowledgeable about Crustdata&apos;s API documentation and can assist with
+            queries related to API usage, endpoints, and best practices.
           </p>
           <p>
-            For more information about Crustdata's APIs, please visit our{' '}
+            For more information about Crustdata&apos;s APIs, please visit our{' '}
             <Link
               className="font-medium underline underline-offset-4"
               href="https://docs.crustdata.com"
