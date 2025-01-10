@@ -23,9 +23,7 @@ export const Overview = () => {
             />
           </div>
           <p>
-            This chatbot is designed to provide seamless support for Crustdata&apos;s API users. It
-            utilizes Next.js and the AI SDK by Vercel to create an interactive and responsive chat
-            experience.
+            This chatbot is designed to provide seamless support for Crustdata&apos;s API users.
           </p>
           <p>
             The bot is knowledgeable about Crustdata&apos;s API documentation and can assist with

@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 
 const PurePreviewMessage = ({
   message,
+  isLoading
 }: {
   message: any;
   isLoading: boolean;
@@ -34,18 +35,32 @@ const PurePreviewMessage = ({
             </div>
           )}
 
-          <div className="flex flex-col gap-2 w-full">
-            <div className="flex flex-row gap-2 items-start">
-              <div
-                className={cn('flex flex-col gap-4', {
-                  'bg-primary text-primary-foreground px-3 py-2 rounded-xl':
-                    message.role === 'user',
-                })}
-              >
-                <Markdown>{message.content as string}</Markdown>
-              </div>
-            </div>
-          </div>
+          {
+            isLoading ? (
+              <>
+                <div className="flex flex-col gap-2 w-full">
+                  <div className="flex flex-col gap-4 text-muted-foreground">
+                    Thinking...
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-col gap-2 w-full">
+                  <div className="flex flex-row gap-2 items-start">
+                    <div
+                      className={cn('flex flex-col gap-4', {
+                        'bg-primary text-primary-foreground px-3 py-2 rounded-xl':
+                          message.role === 'user',
+                      })}
+                    >
+                      <Markdown>{message.content as string}</Markdown>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )
+          }
         </div>
       </motion.div>
     </AnimatePresence>
