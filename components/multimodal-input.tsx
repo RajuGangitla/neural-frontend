@@ -8,7 +8,6 @@ import {
   useState,
   memo,
 } from 'react';
-import { toast } from 'sonner';
 import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
 import { Button } from './ui/button';
@@ -18,6 +17,7 @@ import { FileText, Loader2, Upload, X } from 'lucide-react';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { uploadFile } from '@/utils/fileUplaod';
+import { toast } from 'sonner';
 
 
 function PureMultimodalInput({
@@ -205,6 +205,7 @@ function PureAttachmentsButton({
     try {
       setIsUploading(true);
       await uploadFile(selectedFile);
+      toast.success("File Upload Successfully")
       setDialogOpen(false);
       setSelectedFile(null);
     } catch (error) {
@@ -213,6 +214,7 @@ function PureAttachmentsButton({
       setIsUploading(false);
     }
   };
+
   return (
 
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
