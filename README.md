@@ -1,6 +1,6 @@
-# CrustData Chat Bot
+# RAG Agents
 
-A customer chatbot for interacting with CrustData APIs.
+RAG Agents: Interact with Your PDFs Like Never Before
 
 ## Environment Variables
 

@@ -14,31 +14,14 @@ export const Overview = () => {
         transition={{ delay: 0.5 }}
       >
         <div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center max-w-xl">
-          <div className="flex flex-row justify-center gap-4 items-center">
-            <Image
-              src="/images/crustdata.png"
-              alt="Crustdata Logo"
-              width={240}
-              height={240}
-            />
-          </div>
           <p>
-            This chatbot is designed to provide seamless support for Crustdata&apos;s API users.
+            Welcome to your personal RAG-powered assistant! Upload your files and start asking questions.
           </p>
           <p>
-            The bot is knowledgeable about Crustdata&apos;s API documentation and can assist with
-            queries related to API usage, endpoints, and best practices.
+            This application uses Retrieval-Augmented Generation (RAG) to provide accurate and context-aware answers based on the content of your uploaded documents.
           </p>
           <p>
-            For more information about Crustdata&apos;s APIs, please visit our{' '}
-            <Link
-              className="font-medium underline underline-offset-4"
-              href="https://docs.crustdata.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              API documentation
-            </Link>.
+            Simply upload your files, and the chatbot will help you extract insights, answer questions, and provide summaries.
           </p>
         </div>
       </motion.div>

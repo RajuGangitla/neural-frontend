@@ -6,9 +6,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://crustdata.com/'),
-  title: 'CrustData Chat Bot',
-  description: 'Customer chatbot on CrustData Apis',
+  title: 'Rag Application',
+  description: 'Pdf RAG Application',
 };
 
 export const viewport = {
