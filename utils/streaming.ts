@@ -25,7 +25,6 @@ export async function handleAgentApiCall(message: string) {
         body: JSON.stringify({ query: message }),
     });
 
-
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
