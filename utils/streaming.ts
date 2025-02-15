@@ -17,7 +17,7 @@ export async function* getIterableStream(
 }
 
 export async function handleAgentApiCall(message: string) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/agent`, { // Note the /stream endpoint
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, { // Note the /stream endpoint
         method: "POST",
         headers: {
             "Content-Type": "application/json",
